@@ -7,10 +7,12 @@
   
   
   
+  <meta name="description" content="如何使用STM32CubeMX与VSCode配合GCC或Keil开发STM32项目">
+  
   <title>
     如何使用STM32CubeMX和VSCode编译烧录stm32 |
     
-    Hexo
+    数声风笛离亭晚，君向潇湘我向秦
   </title>
   <!-- Icon -->
   
@@ -68,7 +70,7 @@
       
       
       
-        <p>当前战队开发的许多项目都采用了STM32CubeMX与VSCode进行开发的工作流，为了方便新人能够快速上手，下面将会介绍如何使用STM32CubeMX与VSCode进行stm32的开发。(<em>默认你已经安装了STM32CubeMX与VSCode，详细安装请自行上网搜索</em>)</p>
+        <p>在上一届的许多项目都采用了STM32CubeMX与VSCode进行开发的工作流，为了方便新人能够快速上手，下面将会介绍如何使用STM32CubeMX与VSCode配合GCC或Keil开发STM32项目。<span id="more"></span>(<em>默认你已经安装了STM32CubeMX与VSCode，详细安装请自行上网搜索</em>)</p>
 <ul>
 <li>目标人群：战队新人</li>
 <li>教程目标：能够使用STM32CubeMX与VSCode进行stm32的开发</li>
@@ -90,7 +92,7 @@
 <p>随后，继续在该页面下滑，找到并勾选<code>Axf to Elf</code>，如下图所示：</p>
 <p><img src="/../images/EIDE_TOOL_ALF2ELF.png" alt="EIDE工具链路径"></p>
 <p>至此，EIDE的环境配置已经完成。</p>
-<h2 id="2-开始创建工程"><a href="#2-开始创建工程" class="headerlink" title="2. 开始创建工程"></a>2. 开始创建工程</h2><h3 id="2-1-利用gcc-arm-none-eabi创建"><a href="#2-1-利用gcc-arm-none-eabi创建" class="headerlink" title="2.1 利用gcc-arm-none-eabi创建"></a>2.1 利用gcc-arm-none-eabi创建</h3><h4 id="2-1-1-STM32CubeMX创建工程"><a href="#2-1-1-STM32CubeMX创建工程" class="headerlink" title="2.1.1 STM32CubeMX创建工程"></a>2.1.1 STM32CubeMX创建工程</h4><p>打开STM32CubeMX，<strong>建议不要使用中文路径以及中文项目名称</strong>，在配置完所需的引脚以及时钟等参数后，我们在生成代码时选择生成<code>Makefile</code>，如下图所示：</p>
+<h2 id="2-开始创建工程"><a href="#2-开始创建工程" class="headerlink" title="2. 开始创建工程"></a>2. 开始创建工程</h2><h3 id="2-1-利用gcc-arm-none-eabi创建-推荐"><a href="#2-1-利用gcc-arm-none-eabi创建-推荐" class="headerlink" title="2.1 利用gcc-arm-none-eabi创建 (推荐)"></a>2.1 利用gcc-arm-none-eabi创建 (<em>推荐</em>)</h3><h4 id="2-1-1-STM32CubeMX创建工程"><a href="#2-1-1-STM32CubeMX创建工程" class="headerlink" title="2.1.1 STM32CubeMX创建工程"></a>2.1.1 STM32CubeMX创建工程</h4><p>打开STM32CubeMX，<strong>建议不要使用中文路径以及中文项目名称</strong>，在配置完所需的引脚以及时钟等参数后，我们在生成代码时选择生成<code>Makefile</code>，如下图所示：</p>
 <p><img src="/../images/CUBEMX_MAKEFILE.png" alt="生成Makefile"></p>
 <p>在生成完成后，打开生成的文件夹</p>
 <h4 id="2-1-2-导入工程到VSCode"><a href="#2-1-2-导入工程到VSCode" class="headerlink" title="2.1.2 导入工程到VSCode"></a>2.1.2 导入工程到VSCode</h4><p>在当前文件夹中打开VSCode，在侧边栏中选择<code>EIDE</code>，然后选择<code>新建项目</code>，<code>空项目</code>，如下图所示：</p>
@@ -108,6 +110,57 @@
 <p><img src="/../images/EIDE_ADD_FILE1.png" alt="EIDE添加文件夹"><br><img src="/../images/EIDE_ADD_FILE2.png" alt="EIDE添加文件夹"></p>
 <p>然后再次点击<code>添加源文件夹</code>，选择<code>虚拟文件夹</code>，随便给这个文件夹起个名字，然后先把他晾着(为什么？这是好事，先别管^^),如下图所示(仔细看<code>s</code>和其他文件夹的区别)：</p>
 <p><img src="/../images/EIDE_ADD_FILE3.png" alt="EIDE添加文件夹"></p>
+<p>随后，我们从<code>侧边栏</code>的<code>资源管理器</code>中找到<code>Makefile</code>，此时我们需要将该文件的部分内容修改至EIDE的配置中，我们根据<code>Makefile</code>中的内容从上往下看：</p>
+<ol>
+<li><p>找到<code>ASM_SOURCES</code>,可以看到:</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># ASM sources</span></span><br><span class="line">ASM_SOURCES =  \</span><br><span class="line">startup_stm32f407xx.s</span><br></pre></td></tr></table></figure>
+
+<p> 我们要将这个文件添加到刚刚创建的<code>虚拟文件夹</code>中，右键<code>虚拟文件夹</code>，点击<code>添加文件</code>，找到<code>.s</code>文件，如下图所示：</p>
+<p> <img src="/../images/EIDE_ADD_FILE5.png" alt="EIDE添加文件夹"></p>
+<p> 注意，<strong>如果要使用<code>arm-math</code>库加速运算</strong>，我们还需要在虚拟文件夹中加入,其静态链接库文件，路径为<code>\Middlewares\ST\ARM\DSP\Lib\libarm_cortexM4lf_math.a</code>,其后缀为<code>.a</code>而不是<code>.s</code>，然后还需在<code>预处理宏定义</code>中加入<code>ARM_MATH_CM4</code></p>
+</li>
+<li><p>找到<code>CPU</code>,<code>FPU</code>,<code>FLOAT-ABI</code>，这三个变量，我们需要将其添加到<code>构建配置: GCC</code>中，如下图所示：</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># cpu</span></span><br><span class="line">CPU = -mcpu=cortex-m4</span><br><span class="line"></span><br><span class="line"><span class="comment"># fpu</span></span><br><span class="line">FPU = -mfpu=fpv4-sp-d16</span><br><span class="line"></span><br><span class="line"><span class="comment"># float-abi</span></span><br><span class="line">FLOAT-ABI = -mfloat-abi=hard</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p> <img src="/../images/EIDE_CPU.png" alt="EIDE修改构建配置"></p>
+<p> 选择相应的CPU类型。</p>
+<p> 之后刚刚的位置出现了<code>硬件浮点选项</code>，我们修改为<code>single</code>,如下图所示：</p>
+<p> <img src="/../images/EIDE_FLOAT.png" alt="EIDE修改构建配置"></p>
+<p> 继续修改下方的<code>构建器选项</code>，找到<code>全局选项</code>，将<code>硬件浮点ABI</code>修改为<code>hard</code>,保存,如下图所示：</p>
+<p> <img src="/../images/EIDE_FLOAT_ABI.png" alt="EIDE修改构建配置"></p>
+</li>
+<li><p>找到<code>C_DEFS</code>, <code>C_INCLUDES</code>:<br> 将这些内容添加到EIDE的<code>项目属性中</code>，注意他们的格式不一样，<code>Makefile</code>中的<code>C_DEFS</code>是以<code>-D</code>开头的，<code>C_INCLUDES</code>是以<code>-I</code>开头的：</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># C defines</span></span><br><span class="line">C_DEFS =  \</span><br><span class="line">-DUSE_HAL_DRIVER \</span><br><span class="line">-DSTM32F407xx</span><br><span class="line"><span class="comment"># C includes</span></span><br><span class="line">C_INCLUDES =  \</span><br><span class="line">-IInc \</span><br><span class="line">-IDrivers/STM32F4xx_HAL_Driver/Inc \</span><br></pre></td></tr></table></figure>
+
+<p> 但是在项目属性中，他们不是以<code>-D</code>或者<code>-I</code>开头的，而是    -  (注意前后的空格,没看明白就复制下面的)，以下为一个简单的例子:</p>
+ <figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># Preprocessor Definitions</span></span><br><span class="line"><span class="attr">Defines:</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">USE_HAL_DRIVER</span></span><br><span class="line">    <span class="bullet">-</span> <span class="string">STM32F407xx</span></span><br></pre></td></tr></table></figure>
+
+<p> 我们可以先将<code>Makefile</code>中的内容复制到<code>项目属性</code>中，然后再修改为<code>-</code>开头的，有个快速修改的小技巧(复制到对应位置后按下<code>ctrl+f</code>，然后输入<code>-D</code>或者<code>-I</code>，然后替换为 - (Markdown不太支持空格，记住这个 - 前面有4个空格，后面1个)即可)，如下图所示：</p>
+<p> <img src="/../images/EIDE_C_DEFS.png" alt="EIDE修改构建配置"></p>
+<p> 修改Define同理，再继续查找<code>-D</code>即可。</p>
+</li>
+<li><p>返回<code>Makefile</code>中，找到<code>LDSCRIPT</code>,我们需要在EIDE中添加相应的链接器脚本。如下图所示：</p>
+ <figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># link script</span></span><br><span class="line">LDSCRIPT = STM32F407IGHx_FLASH.ld</span><br></pre></td></tr></table></figure>
+
+<p> 我们需要在<code>构建配置: GCC</code>中找到<code>链接脚本路径</code>，复制粘贴，然后添加相应的链接器脚本，如下图所示：</p>
+<p> <img src="/../images/EIDE_LDSCRIPT.png" alt="EIDE修改构建配置"></p>
+</li>
+<li><p>点击右上角的<code>构建</code>或者按下<code>F7</code>，我们就可以看到我们的代码已经成功的编译了，如下图所示：</p>
+<p> <img src="/../images/EIDE_SUCCESS1.png" alt="EIDE编译成功"></p>
+</li>
+<li><p>可能的报错解决方法：在第一次编译时明明什么文件都没加，怎么编译就显示缺少头文件呢？</p>
+<p> <img src="/../images/EIDE_ERROR2.png" alt="EIDE编译缺少头文件"></p>
+<p> 出现这种情况可能是你的CubeMX在生成代码时生成了一些<strong>多余</strong>代码，我们并不需要，delete掉就好了，如下图所示：</p>
+<p> <img src="/../images/EIDE_DELETE.png" alt="EIDE删除多余文件"></p>
+<p> 选上的这些全部删除，然后打开STM32CubeMX,到<code>Project Manager</code>中，找到<code>Code Generator</code>中的<code>Stm32Cube MCU packages and embedded software packes</code></p>
+<ul>
+<li><input disabled="" type="checkbox"> <code>Copy all used libraries into the project folder</code></li>
+<li><input checked="" disabled="" type="checkbox"> <code>Copy only the necessary library files</code></li>
+</ul>
+<p> <img src="/../images/CUBEMX_DELETE.png" alt="STM32CubeMX生成文件选择"></p>
+<p> 这样选择就好，返回Vsode，将EIDE刚刚包含的源文件夹全部删除(不包括虚拟文件夹)，然后重新添加，根据<code>Makefile</code>修改一下包含的头文件，再次编译，应该就不会报错了。</p>
+</li>
+</ol>
 <h3 id="2-2-在现有的keil工程中创建"><a href="#2-2-在现有的keil工程中创建" class="headerlink" title="2.2 在现有的keil工程中创建"></a>2.2 在现有的keil工程中创建</h3><h4 id="2-2-1-STM32CubeMX创建keil工程"><a href="#2-2-1-STM32CubeMX创建keil工程" class="headerlink" title="2.2.1 STM32CubeMX创建keil工程"></a>2.2.1 STM32CubeMX创建keil工程</h4><p>打开STM32CubeMX，正常生成项目，<strong>建议不要使用中文路径以及中文项目名称</strong>，在生成代码前选择生成keil工程，如下图所示：</p>
 <p><img src="/../images/CUBEMX_KEIL.png" alt="生成keil工程"></p>
 <p>这里我们选择<code>MDK-ARM V5</code>，然后点击<code>Generate Code</code>，生成代码后，我们会看到在工程文件夹下生成了一个<code>.uvprojx</code>文件，稍后我们会用到。</p>
@@ -141,12 +194,12 @@
 <p>再次编译，我们就生成了ELF文件，如下图所示：</p>
 <p><img src="/../images/EIDE_ELF.png" alt="EIDE生成ELF"></p>
 <p>至此，我们已经成功的导入了keil工程，并且成功的编译了代码。接下来我们就可以进行烧录以及调试了。</p>
-<h4 id="2-2-4-烧录"><a href="#2-2-4-烧录" class="headerlink" title="2.2.4 烧录"></a>2.2.4 烧录</h4><p>不知道下一届选择的是什么烧录器，不过大概率还是9块9的包邮的ST-LINK，那么我就默认用ST-LINK来进行烧录。</p>
+<h3 id="2-3-烧录"><a href="#2-3-烧录" class="headerlink" title="2.3 烧录"></a>2.3 烧录</h3><p>不知道下一届选择的是什么烧录器，不过大概率还是9块9的包邮的ST-LINK，那么我就默认用ST-LINK来进行烧录。</p>
 <p>在<code>烧录配置</code>中选择<code>切换烧录器</code>然后选择<code>OpenOCD</code>，如下图所示：</p>
 <p><img src="/../images/EIDE_DownLoad_Select.png" alt="EIDE烧录配置"></p>
 <p>接着继续在<code>烧录配置</code>的菜单栏下切换<code>芯片配置</code>到你所使用的芯片型号，A&#x2F;C板都是<strong>stm32f4x.cfg</strong></p>
 <p>此时我们点击右上角的烧录选项或者<code>ctrl+shift+D</code>，选择<code>下载</code>，就可以进行烧录了，由于我这里没有设备，所以就不演示了。</p>
-<h4 id="2-2-5-调试"><a href="#2-2-5-调试" class="headerlink" title="2.2.5 调试"></a>2.2.5 调试</h4><p>我们可以在VSCode中借助Cortex-Debug插件进行调试,同样的在EIDE插件的项目中右键，找到<code>生成调试器配置模板</code>，根据你的烧录器选择，如果是ST-LINK就选择<code>OpenOCD</code>，如下图所示：</p>
+<h3 id="2-4-调试"><a href="#2-4-调试" class="headerlink" title="2.4 调试"></a>2.4 调试</h3><p>我们可以在VSCode中借助Cortex-Debug插件进行调试,同样的在EIDE插件的项目中右键，找到<code>生成调试器配置模板</code>，根据你的烧录器选择，如果是ST-LINK就选择<code>OpenOCD</code>，如下图所示：</p>
 <p><img src="/../images/EIDE_Debug_Select.png" alt="EIDE调试配置"></p>
 <p>在新打开的页面中根据需要选择(跟烧录差不多)，然后<code>新建</code></p>
 <p>这时我们打开左侧边栏中的<code>运行和调试</code>,理论上已经可以直接调试了，但为了能够实时检测变量的变化，我们还需要对<strong>launch.json</strong>，进行一些简单的配置。</p>
@@ -164,29 +217,17 @@
     </div>
     <footer class="article-footer">
       <a data-url="http://example.com/2024/08/22/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8STM32CubeMX%E5%92%8CVSCode%E7%BC%96%E8%AF%91%E7%83%A7%E5%BD%95stm32/" data-id="cm04uj51d0000mgr2as3c4b6i" class="article-share-link">
-        Share
+        分享
       </a>
       
+<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/rm/" rel="tag">rm</a></li></ul>
+
     </footer>
 
   </div>
 
   
   
-<nav class="article-nav">
-  
-  <a href="/2024/08/22/hello-world/" class="article-nav-link">
-    <strong class="article-nav-caption">Newer</strong>
-    <div class="article-nav-title">
-      
-      Hello World
-      
-    </div>
-  </a>
-  
-  
-</nav>
-
   
 
   
@@ -199,7 +240,7 @@
     <footer class="footer">
   <div class="outer">
     <ul class="list-inline">
-      <li>Hexo &copy; 2024</li>
+      <li>数声风笛离亭晚，君向潇湘我向秦 &copy; 2024</li>
       
         <li>
           
@@ -225,7 +266,7 @@
 <nav class="navbar">
   
   <div class="logo">
-    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
+    <a href="/"><img src="/images/hexo.svg" alt="数声风笛离亭晚，君向潇湘我向秦"></a>
   </div>
   
   <ul class="nav nav-main">
@@ -247,9 +288,9 @@
     </li>
     
     <li class="nav-item">
-      <a class="nav-item-link nav-item-search" title="Search">
+      <a class="nav-item-link nav-item-search" title="搜索">
         <i class="fe fe-search"></i>
-        Search
+        搜索
       </a>
     </li>
   </ul>
