@@ -1,336 +1,387 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  
+  
+  
+  <title>
+    
+    Hexo
+  </title>
+  <!-- Icon -->
+  
+    <link rel="shortcut icon" href="/favicon.ico">
+    
+  
+<link rel="stylesheet" href="/css/style.css">
 
+  
+  
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.min.css">
 
-
-
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-<meta http-equiv="X-UA-Compatible" content="ie=edge">
-
-  <meta name="author" content="John Doe">
-
-
-
-
-
-<title>Hexo</title>
-
-
-
-<link rel="icon" href="/favicon.png">
-
-
-
-<link rel="stylesheet" href="/css/main.css">
-
-
-<link rel="stylesheet" href="/lib/nprogress/nprogress.css">
-
-
-
-<script src="/lib/jquery.min.js"></script>
-
-
-<script src="/lib/iconify-icon.min.js"></script>
-
-
-<script src="https://cdn.tailwindcss.com?plugins=typography"></script>
-<script>
-  tailwind.config = {
-    darkMode: "class",
-  };
-</script>
-
-
-<script src="/lib/nprogress/nprogress.js"></script>
-
-<script>
-  $(document).ready(() => {
-    NProgress.configure({
-      showSpinner: false,
-    });
-    NProgress.start();
-    $("#nprogress .bar").css({
-      background: "#de7441",
-    });
-    $("#nprogress .peg").css({
-      "box-shadow": "0 0 2px #de7441, 0 0 4px #de7441",
-    });
-    $("#nprogress .spinner-icon").css({
-      "border-top-color": "#de7441",
-      "border-left-color": "#de7441",
-    });
-    setTimeout(function () {
-      NProgress.done();
-      $(".fade").removeClass("out");
-    }, 800);
-  });
-</script>
-
-<script>
-  (function () {
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-    if (setting === "dark" || (prefersDark && setting !== "light"))
-      document.documentElement.classList.toggle("dark", true);
-    let isDark = document.documentElement.classList.contains("dark");
-  })();
-
-  $(document).ready(function () {
-    // init icon
-    const prefersDark =
-      window.matchMedia &&
-      window.matchMedia("(prefers-color-scheme: dark)").matches;
-    const isDark = document.documentElement.classList.contains("dark");
-    $("#theme-icon").attr("icon", isDark ? "ri:moon-line" : "ri:sun-line");
-
-    function toggleGiscusTheme() {
-      const isDark = document.documentElement.classList.contains("dark");
-      const giscusFrame = document.querySelector("iframe.giscus-frame");
-      if (giscusFrame) {
-        giscusFrame.contentWindow.postMessage(
-          {
-            giscus: {
-              setConfig: {
-                theme: isDark ? "dark" : "light",
-              },
-            },
-          },
-          "https://giscus.app"
-        );
-      }
-    }
-
-
-    // toggle dark mode
-    function toggleDark() {
-      let isDark = document.documentElement.classList.contains("dark");
-      const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-      isDark = !isDark;
-      document.documentElement.classList.toggle("dark", isDark);
-      $("#theme-icon").attr("icon", isDark ? "ri:moon-line" : "ri:sun-line");
-      if (prefersDark === isDark) {
-        localStorage.setItem("hexo-color-scheme", "auto");
-      } else {
-        localStorage.setItem("hexo-color-scheme", isDark ? "dark" : "light");
-      }
-      toggleGiscusTheme();
-    }
-    $("#toggle-dark").click(toggleDark);
-
-    // listen dark mode change
-    window
-      .matchMedia("(prefers-color-scheme: dark)")
-      .addEventListener("change", (e) => {
-        const setting = localStorage.getItem("hexo-color-scheme") || "auto";
-        if (setting === "auto") {
-          document.documentElement.classList.toggle("dark", e.matches);
-          $("#theme-icon").attr(
-            "icon",
-            e.matches ? "ri:moon-line" : "ri:sun-line"
-          );
-          toggleGiscusTheme();
-        }
-      });
-  });
-</script>
-
-
-
+  
+  
+<script src="/js/pace.min.js"></script>
 
 <meta name="generator" content="Hexo 7.3.0"></head>
-<body class="font-sans bg-white dark:bg-zinc-900 text-gray-700 dark:text-gray-200 relative">
-  <header class="fixed w-full px-5 py-1 z-10 backdrop-blur-xl backdrop-saturate-150 border-b border-black/5">
-  <div class="max-auto">
-    <nav class="flex items-center text-base">
-      <a href="/" class="group">
-        <h2 class="font-medium tracking-tighterp text-l p-2">
-          <img class="w-5 mr-2 inline-block transition-transform group-hover:rotate-[30deg]" id="logo" src="/images/logo.svg" alt="Hexo" />
-          Hexo
-        </h2>
-      </a>
-      <div id="header-title" class="opacity-0 md:ml-2 md:mt-[0.1rem] text-xs font-medium whitespace-nowrap overflow-hidden overflow-ellipsis">
-        
-      </div>
-      <div class="flex-1"></div>
-      <div class="flex items-center gap-3">
-        
-          <a class="hidden sm:flex" href="/archives">Posts</a>
-        
-        
-          
-            <a class="w-5 h-5 hidden sm:flex" title="Github" target="_blank" rel="noopener" href="https://github.com/xbmlz">
-              <iconify-icon width="20" icon="ri:github-line"></iconify-icon>
-            </a>
-          
-        
-        <a class="w-5 h-5 hidden sm:flex" title="Github" href="rss2.xml">
-          <iconify-icon width="20" icon="ri:rss-line"></iconify-icon>
-        </a>
-        <a class="w-5 h-5" title="toggle theme" id="toggle-dark">
-          <iconify-icon width="20" icon="" id="theme-icon"></iconify-icon>
-        </a>
-      </div>
-      <div class="flex items-center justify-center gap-3 ml-3 sm:hidden">
-        <span class="w-5 h-5" aria-hidden="true" role="img" id="open-menu">
-          <iconify-icon width="20" icon="carbon:menu" ></iconify-icon>
-        </span>
-        <span class="w-5 h-5 hidden" aria-hidden="true" role="img" id="close-menu">
-          <iconify-icon  width="20" icon="carbon:close" ></iconify-icon>
-        </span>
-      </div>
-    </nav>
-  </div>
-</header>
-<div id="menu-panel" class="h-0 overflow-hidden sm:hidden fixed left-0 right-0 top-12 bottom-0 z-10">
-  <div id="menu-content" class="relative z-20 bg-white/80 px-6 sm:px-8 py-2 backdrop-blur-xl -translate-y-full transition-transform duration-300">
-    <ul class="nav flex flex-col sm:flex-row text-sm font-medium">
-      
-        <li class="nav-portfolio sm:mx-2 border-b sm:border-0 border-black/5 last:border-0 hover:text-main">
-          <a href="/archives" class="flex h-12 sm:h-auto items-center">Posts</a>
-        </li>
-      
-    </ul>
-  </div>
-  <div class="mask bg-black/20 absolute inset-0"></div>
-</div>
 
-  <main class="pt-14">
-    <section class="px-6 max-w-prose mx-auto gap-12 grid grid-cols-1">
-  <div class="flex flex-col h-48 items-center justify-center">
-    <h1 class="site-title text-4xl leading-relaxed">
-      Hexo
-    </h1>
-    <p class="text-gray-500 mt-2">
-      
-    </p>
+<body>
+  <main class="content">
+    <section class="jumbotron">
+  <div class="video">
+    
+    <div class="video-frame">
+      <img src="/images/ocean/overlay-hero.png" alt="Decorative image frame">
+    </div>
+    
+    <div class="video-media">
+      <video playsinline="" autoplay="" loop="" muted="" data-autoplay="" poster="/images/ocean/ocean.png"
+        x5-video-player-type="h5">
+        <source src="/images/ocean/ocean.mp4" type="video/mp4">
+        <source src="/images/ocean/ocean.ogv" type="video/ogg">
+        <source src="/images/ocean/ocean.webm" type="video/webm">
+        <p>Your user agent does not support the HTML5 Video element.</p>
+      </video>
+      <div class="video-overlay"></div>
+    </div>
+    <div class="video-inner text-center text-white">
+      <h1><a href="/">Hexo</a></h1>
+      <p></p>
+      <div><img src="/images/hexo-inverted.svg" class="brand" alt="Hexo"></div>
+    </div>
+    <div class="video-learn-more">
+      <a class="anchor" href="#landingpage"><i class="fe fe-mouse"></i></a>
+    </div>
   </div>
+</section>
+<div id="landingpage">
+  <section class="outer">
+  <article class="articles">
+    
+    <h1 class="page-type-title"></h1>
+    
+    
+    <article id="post-hello-world" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
+    
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2024/08/22/hello-world/">Hello World</a>
+  </h2>
   
   
+
+    </header>
     
+
     
-      <div class="relative pointer-events-none">
-        <span class="text-9xl opacity-10 absolute -left-11 -top-6 font-bold">2024</span>
-      </div>
+    <div class="article-meta">
+      <a href="/2024/08/22/hello-world/" class="article-date">
+  <time datetime="2024-08-22T04:31:39.761Z" itemprop="datePublished">2024-08-22</time>
+</a>
+      
+    </div>
     
-    <a style="--stagger:0" href="/2024/08/22/hello-world/" data-animate>
-      <header>
-        <h2 class="font-bold text-xl">
-          Hello World
-        </h2>
-      </header>
-      <section class="text-gray-400 my-2 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          Aug 22
-          ·
-          1 min
-        </p>
-      </section>
-    </a>
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <p>Welcome to <a target="_blank" rel="noopener" href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a target="_blank" rel="noopener" href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a target="_blank" rel="noopener" href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a target="_blank" rel="noopener" href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p>
+<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/writing.html">Writing</a></p>
+<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/server.html">Server</a></p>
+<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/generating.html">Generating</a></p>
+<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
+
+<p>More info: <a target="_blank" rel="noopener" href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/22/hello-world/" data-id="cm04u1uup000074r239ssfb67" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
   
+
+  
+
+</article>
     
+    <article id="post-如何使用STM32CubeMX和VSCode编译烧录stm32" class="article article-type-post" itemscope
+  itemprop="blogPost" data-scroll-reveal>
+
+  <div class="article-inner">
     
-    <a style="--stagger:1" href="/2024/08/22/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8STM32CubeMX%E5%92%8CVSCode%E7%BC%96%E8%AF%91%E7%83%A7%E5%BD%95stm32/" data-animate>
-      <header>
-        <h2 class="font-bold text-xl">
-          如何使用STM32CubeMX和VSCode编译烧录stm32
-        </h2>
-      </header>
-      <section class="text-gray-400 my-2 text-sm time">
-        <p class="line-clamp-4">
-          
-        </p>
-        <p class="line-clamp-4">
-          Aug 22
-          ·
-          8 min
-        </p>
-      </section>
-    </a>
+    <header class="article-header">
+      
+  
+  <h2 class="article-title" itemprop="name">
+    <a href="/2024/08/22/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8STM32CubeMX%E5%92%8CVSCode%E7%BC%96%E8%AF%91%E7%83%A7%E5%BD%95stm32/">如何使用STM32CubeMX和VSCode编译烧录stm32</a>
+  </h2>
+  
+  
+
+    </header>
+    
+
+    
+    <div class="article-meta">
+      <a href="/2024/08/22/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8STM32CubeMX%E5%92%8CVSCode%E7%BC%96%E8%AF%91%E7%83%A7%E5%BD%95stm32/" class="article-date">
+  <time datetime="2024-08-22T03:15:44.000Z" itemprop="datePublished">2024-08-22</time>
+</a>
+      
+    </div>
+    
+
+    
+
+    <div class="article-entry" itemprop="articleBody">
+      
+      
+        
+      
+      
+        <p>当前战队开发的许多项目都采用了STM32CubeMX与VSCode进行开发的工作流，为了方便新人能够快速上手，下面将会介绍如何使用STM32CubeMX与VSCode进行stm32的开发。(<em>默认你已经安装了STM32CubeMX与VSCode，详细安装请自行上网搜索</em>)</p>
+<ul>
+<li>目标人群：战队新人</li>
+<li>教程目标：能够使用STM32CubeMX与VSCode进行stm32的开发</li>
+<li>教程难度：简单</li>
+<li>预计用时：1小时</li>
+<li>前置条件：安装STM32CubeMX与VSCode以及keil</li>
+<li>教程内容：环境搭建、创建工程、编译烧录、调试</li>
+</ul>
+<h2 id="1-环境搭建"><a href="#1-环境搭建" class="headerlink" title="1. 环境搭建"></a>1. 环境搭建</h2><p>为了实现能够在VSCode中编译烧录stm32，我们需要安装一些插件: Embedded IDE, Cortex-Debug, C&#x2F;C++等插件。安装方法如下：在VSCode侧边栏中打开或按下<code>Ctrl+Shift+X</code>，然后在搜索框中输入插件名，点击安装即可。<br><img src="/../images/EIDE.png" alt="插件安装eide"><br><img src="/../images/cortex-debug.png" alt="插件安装cortex-debug"><br><img src="/../images/c-c++.png" alt="插件安装c/c++"></p>
+<h3 id="1-1-EIDE环境配置"><a href="#1-1-EIDE环境配置" class="headerlink" title="1.1 EIDE环境配置"></a>1.1 EIDE环境配置</h3><p>在下载插件后，我们还需要进行一些简单的配置，以便能够正常的编译以及烧录STM32代码。</p>
+<p>在windos中，插件通常会自动插件将自动下载并安装 <code>eide-binaries</code> 和 <code>.NET6 X64 Runtime</code>，请耐心等待，待安装完成后，需要重启VSCode。</p>
+<p>在Linux中，需要手动下载并安装<code>.NET6 X64 Runtime</code>，下载地址为：<a target="_blank" rel="noopener" href="https://dotnet.microsoft.com/en-us/download/dotnet/6.0">.NET6 X64 Runtime</a>，下载完成后，解压并安装即可。</p>
+<p>上述操作完成后，我们会看到侧边栏出现了EIDE的图标，打开后看到如下界面(*ps: 忽略电脑管家^^)：</p>
+<p><img src="/../images/EIDE_GUI.png" alt="EIDE界面"></p>
+<p>随后我们选择下方的<code>安装实用工具</code>,我们需要安装一些工具链以便于编译我们的代码，<strong>一共有4个</strong>，如下图所示：</p>
+<p><img src="/../images/EIDE_TOOL.png" alt="EIDE工具链"></p>
+<p>随后，我们点击<code>打开插件设置</code>，找到你的keil的安装路径下的ARM文件夹，然后找到ARMCC文件夹，将路径复制到<code>Armcc v5 toolchain安装目录</code>中，如下图所示：</p>
+<p><img src="/../images/EIDE_TOOL_PATH.png" alt="EIDE工具链路径"></p>
+<p>随后，继续在该页面下滑，找到并勾选<code>Axf to Elf</code>，如下图所示：</p>
+<p><img src="/../images/EIDE_TOOL_ALF2ELF.png" alt="EIDE工具链路径"></p>
+<p>至此，EIDE的环境配置已经完成。</p>
+<h2 id="2-开始创建工程"><a href="#2-开始创建工程" class="headerlink" title="2. 开始创建工程"></a>2. 开始创建工程</h2><h3 id="2-1-利用gcc-arm-none-eabi创建"><a href="#2-1-利用gcc-arm-none-eabi创建" class="headerlink" title="2.1 利用gcc-arm-none-eabi创建"></a>2.1 利用gcc-arm-none-eabi创建</h3><h4 id="2-1-1-STM32CubeMX创建工程"><a href="#2-1-1-STM32CubeMX创建工程" class="headerlink" title="2.1.1 STM32CubeMX创建工程"></a>2.1.1 STM32CubeMX创建工程</h4><p>打开STM32CubeMX，<strong>建议不要使用中文路径以及中文项目名称</strong>，在配置完所需的引脚以及时钟等参数后，我们在生成代码时选择生成<code>Makefile</code>，如下图所示：</p>
+<p><img src="/../images/CUBEMX_MAKEFILE.png" alt="生成Makefile"></p>
+<p>在生成完成后，打开生成的文件夹</p>
+<h4 id="2-1-2-导入工程到VSCode"><a href="#2-1-2-导入工程到VSCode" class="headerlink" title="2.1.2 导入工程到VSCode"></a>2.1.2 导入工程到VSCode</h4><p>在当前文件夹中打开VSCode，在侧边栏中选择<code>EIDE</code>，然后选择<code>新建项目</code>，<code>空项目</code>，如下图所示：</p>
+<p><img src="/../images/EIDE_NEW.png" alt="EIDE新建项目"></p>
+<p>继续选择<code>Cotex-M项目</code>，如下图所示：</p>
+<p><img src="/../images/EIDE_CORTEX.png" alt="EIDE新建项目"></p>
+<p>随后输入项目名称，注意<strong>这里需要与刚才在STM32CubeMX中创建的工程名称一致</strong>,如果忘记了，可以打开侧边栏的<code>资源管理器</code> 查看当前的文件夹名称，如下图所示：</p>
+<p><img src="/../images/EIDE_FILE_NAME.png" alt="EIDE新建项目"></p>
+<p>然后点击<code>确定</code>，选择存放路径，特别注意<strong>需要返回上一级目录保存</strong>，比如我的路径为<code>a/b/demo2</code>，那么我需要返回到<code>a/b</code>，然后保存,如下图所示：</p>
+<p><img src="/../images/EIDE_PATH.png" alt="EIDE新建项目"></p>
+<p>当我们看到VSCode报出警告*警告: 项目文件夹已存在 !, 是否直接将项目创建在已存在的目录中 ?*，选择<code>yes</code>,如下图所示：</p>
+<p><img src="/../images/EIDE_YES.png" alt="EIDE新建项目"></p>
+<p>此时我们已经成功导入工程到VSCode中</p>
+<h4 id="2-1-3-EIDE配置以及编译"><a href="#2-1-3-EIDE配置以及编译" class="headerlink" title="2.1.3 EIDE配置以及编译"></a>2.1.3 EIDE配置以及编译</h4><p>当我们打开EIDE插件后，发现<code>项目资源</code>空空如也，这是因为我们还没有添加文件，点击<code>添加源文件夹</code>，先选择<code>普通文件夹</code>，然后选择”Drivers” “Inc” “Middlewares” “Src” 这四个文件夹，如下图所示：</p>
+<p><img src="/../images/EIDE_ADD_FILE1.png" alt="EIDE添加文件夹"><br><img src="/../images/EIDE_ADD_FILE2.png" alt="EIDE添加文件夹"></p>
+<p>然后再次点击<code>添加源文件夹</code>，选择<code>虚拟文件夹</code>，随便给这个文件夹起个名字，然后先把他晾着(为什么？这是好事，先别管^^),如下图所示(仔细看<code>s</code>和其他文件夹的区别)：</p>
+<p><img src="/../images/EIDE_ADD_FILE3.png" alt="EIDE添加文件夹"></p>
+<h3 id="2-2-在现有的keil工程中创建"><a href="#2-2-在现有的keil工程中创建" class="headerlink" title="2.2 在现有的keil工程中创建"></a>2.2 在现有的keil工程中创建</h3><h4 id="2-2-1-STM32CubeMX创建keil工程"><a href="#2-2-1-STM32CubeMX创建keil工程" class="headerlink" title="2.2.1 STM32CubeMX创建keil工程"></a>2.2.1 STM32CubeMX创建keil工程</h4><p>打开STM32CubeMX，正常生成项目，<strong>建议不要使用中文路径以及中文项目名称</strong>，在生成代码前选择生成keil工程，如下图所示：</p>
+<p><img src="/../images/CUBEMX_KEIL.png" alt="生成keil工程"></p>
+<p>这里我们选择<code>MDK-ARM V5</code>，然后点击<code>Generate Code</code>，生成代码后，我们会看到在工程文件夹下生成了一个<code>.uvprojx</code>文件，稍后我们会用到。</p>
+<h4 id="2-2-2-导入keil工程到VSCode"><a href="#2-2-2-导入keil工程到VSCode" class="headerlink" title="2.2.2 导入keil工程到VSCode"></a>2.2.2 导入keil工程到VSCode</h4><p>在EIDE的<code>操作</code>栏中，选择<code>导入项目</code>，然后选择MDK工程文件，如下图所示：</p>
+<p><img src="/../images/EIDE_IMPORT.png" alt="EIDE导入项目"></p>
+<p>随后找到刚刚生成的<code>.uvprojx</code>文件路径：</p>
+<p><img src="/../images/EIDE_IMPORT_KEIL_PATH.png" alt="EIDE导入keil路径"></p>
+<p>选择后弹出，<em>是否与原有的 KEIL 项目共存于同一目录下</em>，此处选择<code>yes</code>，随后切换工作区，如下图所示：</p>
+<p><img src="/../images/EIDE_IMPORT_KEIL_YES.png" alt="EIDE导入keil路径"></p>
+<p>切换工作区后，我们会看到在EIDE的项目栏中出现了我们刚刚导入的项目，如下图所示：</p>
+<p><img src="/../images/EIDE_KEIL.png" alt="EIDE导入keil路径"></p>
+<p>这时，我们已经成功通过STM32CubeMX与VSCode导入了keil工程。此时我们还需要进行一些简单的配置，以便于我们的编译以及烧录。</p>
+<h4 id="2-2-3-EIDE配置以及编译"><a href="#2-2-3-EIDE配置以及编译" class="headerlink" title="2.2.3 EIDE配置以及编译"></a>2.2.3 EIDE配置以及编译</h4><p>我们先点击左侧边栏的<code>资源管理器</code>，此时应该会看到以下文件结构：</p>
+<p><img src="/../images/EIDE_FILE.png" alt="EIDE导入keil路径"></p>
+<p>当我们只看到<code>MDK-ARM</code>文件夹时，说明我们此时的工作区中只有该文件夹，若我们需要在该文件夹外添加新的文件，会出现头文件无法找到、无法编译等情况。因此我们需要修改文件<code>MDK-ARM.dode-workspace</code>，将其中的</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;folders&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>修改为</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">&quot;folders&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;.&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;path&quot;</span><span class="punctuation">:</span> <span class="string">&quot;&quot;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">]</span><span class="punctuation">,</span></span><br></pre></td></tr></table></figure>
+
+<p>随后我们尝试编译一下,点击右上角<code>构建</code>或按下<code>F7</code>，然后我们就会发现它报了一万个错^^.</p>
+<p><img src="/../images/EIDE_ERROR1.png" alt="EIDE第一次报错"></p>
+<p>虽然报错了，但还是恭喜你至少前面的<strong>环境配置成功了</strong>，根据错误提示，我们看到这是在<strong>链接阶段出现的错误</strong>，它提示我们在<strong>代码和内存分配时遇到了没有空间的情况</strong>，这是因为我们还没有分配<code>RAM/ROM</code>，此时我们应该打开EIDE插件中的<code>构建配置: AC5</code>找到<code>RAM/FLASH布局</code>点击<code>修改</code> ，现在，你需要打开 Keil 项目，复制 <code>ram/rom 布局数据</code>(点击keil的<code>魔法棒</code>然后点击<code>Target</code>)到 eide 的 <code>存储器布局编辑器</code> 中，然后保存，具体操作如下图所示：</p>
+<p><img src="/../images/EIDE_RAM_ROM.png" alt="EIDE第一次报错"></p>
+<p>将keil的数据复制到EIDE中，注意RAM对齐RAM，ROM对齐ROM，然后保存。</p>
+<p>再次编译^^，这次应该就不会报错了，如下图所示：</p>
+<p><img src="/../images/EIDE_SUCCESS.png" alt="EIDE第一次构建成功"></p>
+<p>但是，为什么没看到ELF文件呢？明明说了<code>Axf to Elf</code>，不会是这个插件问题吧？那我是不是不能调试了？</p>
+<p>别急，我们只需要在<code>构建配置: AC5</code>中找到<code>构建器选项</code>，点击<code>修改</code>,然后在<code>链接器</code>中找到<code>不生成Hex\Bin文件</code>，取消勾选，保存，如下图所示：</p>
+<p><img src="/../images/EIDE_BUILDER.png" alt="EIDE构建器选项"></p>
+<p>再次编译，我们就生成了ELF文件，如下图所示：</p>
+<p><img src="/../images/EIDE_ELF.png" alt="EIDE生成ELF"></p>
+<p>至此，我们已经成功的导入了keil工程，并且成功的编译了代码。接下来我们就可以进行烧录以及调试了。</p>
+<h4 id="2-2-4-烧录"><a href="#2-2-4-烧录" class="headerlink" title="2.2.4 烧录"></a>2.2.4 烧录</h4><p>不知道下一届选择的是什么烧录器，不过大概率还是9块9的包邮的ST-LINK，那么我就默认用ST-LINK来进行烧录。</p>
+<p>在<code>烧录配置</code>中选择<code>切换烧录器</code>然后选择<code>OpenOCD</code>，如下图所示：</p>
+<p><img src="/../images/EIDE_DownLoad_Select.png" alt="EIDE烧录配置"></p>
+<p>接着继续在<code>烧录配置</code>的菜单栏下切换<code>芯片配置</code>到你所使用的芯片型号，A&#x2F;C板都是<strong>stm32f4x.cfg</strong></p>
+<p>此时我们点击右上角的烧录选项或者<code>ctrl+shift+D</code>，选择<code>下载</code>，就可以进行烧录了，由于我这里没有设备，所以就不演示了。</p>
+<h4 id="2-2-5-调试"><a href="#2-2-5-调试" class="headerlink" title="2.2.5 调试"></a>2.2.5 调试</h4><p>我们可以在VSCode中借助Cortex-Debug插件进行调试,同样的在EIDE插件的项目中右键，找到<code>生成调试器配置模板</code>，根据你的烧录器选择，如果是ST-LINK就选择<code>OpenOCD</code>，如下图所示：</p>
+<p><img src="/../images/EIDE_Debug_Select.png" alt="EIDE调试配置"></p>
+<p>在新打开的页面中根据需要选择(跟烧录差不多)，然后<code>新建</code></p>
+<p>这时我们打开左侧边栏中的<code>运行和调试</code>,理论上已经可以直接调试了，但为了能够实时检测变量的变化，我们还需要对<strong>launch.json</strong>，进行一些简单的配置。</p>
+<p>点开<code>运行和调试</code>旁边的<strong>齿轮</strong>，我们可以看到如下图所示的配置文件：</p>
+<p><img src="/../images/EIDE_Debug_Config.png" alt="EIDE调试配置"></p>
+<p>我们加上<code>liveWatch</code>的选项，完整代码如下：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;version&quot;</span><span class="punctuation">:</span> <span class="string">&quot;0.2.0&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;configurations&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">    <span class="punctuation">&#123;</span></span><br><span class="line">      <span class="attr">&quot;cwd&quot;</span><span class="punctuation">:</span> <span class="string">&quot;$&#123;workspaceRoot&#125;&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;type&quot;</span><span class="punctuation">:</span> <span class="string">&quot;cortex-debug&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;request&quot;</span><span class="punctuation">:</span> <span class="string">&quot;launch&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;name&quot;</span><span class="punctuation">:</span> <span class="string">&quot;C_Board_Standard_Robot: OpenOCD&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;servertype&quot;</span><span class="punctuation">:</span> <span class="string">&quot;openocd&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;executable&quot;</span><span class="punctuation">:</span> <span class="string">&quot;build/C_Board_Standard_Robot/C_Board_Standard_Robot.elf&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;runToEntryPoint&quot;</span><span class="punctuation">:</span> <span class="string">&quot;main&quot;</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;configFiles&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span></span><br><span class="line">        <span class="string">&quot;interface/stlink.cfg&quot;</span><span class="punctuation">,</span></span><br><span class="line">        <span class="string">&quot;target/stm32f4x.cfg&quot;</span></span><br><span class="line">      <span class="punctuation">]</span><span class="punctuation">,</span></span><br><span class="line">      <span class="attr">&quot;liveWatch&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">        <span class="attr">&quot;enabled&quot;</span><span class="punctuation">:</span> <span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span></span><br><span class="line">        <span class="attr">&quot;samplesPerSecond&quot;</span><span class="punctuation">:</span> <span class="number">4</span></span><br><span class="line">      <span class="punctuation">&#125;</span></span><br><span class="line">    <span class="punctuation">&#125;</span></span><br><span class="line">  <span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>这时，大部分人都可以进行调试了，但是有些人可能会遇到<strong>一些路径错误</strong>，可能的原因是之前你已经安装了<code>arm-none-eabi-</code>或者<code>mingw64</code>等工具链，但是后来进行了删除，我们此时最好使用从EIDE<code>实用工具</code>下载的工具链，这时我们需要在<code>settings.json</code>中添加一些路径，如所示：</p>
+ <figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">   <span class="attr">&quot;cortex-debug.gdbPath&quot;</span><span class="punctuation">:</span> <span class="string">&quot;your path&quot;</span><span class="punctuation">,</span> <span class="comment">// 通常在C:\Users\yourname\.eide\\tools\\gcc_arm\\bin\\arm-none-eabi-gdb.exe</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>在检测实时变量时，我们需要在<code>运行和调试</code>中找到<code>live Watch</code>，然后点击<code>+</code>，添加你想要监视的变量，注意不能实时监视函数中的局部变量</p>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://example.com/2024/08/22/%E5%A6%82%E4%BD%95%E4%BD%BF%E7%94%A8STM32CubeMX%E5%92%8CVSCode%E7%BC%96%E8%AF%91%E7%83%A7%E5%BD%95stm32/" data-id="cm04uj51d0000mgr2as3c4b6i" class="article-share-link">
+        Share
+      </a>
+      
+    </footer>
+
+  </div>
+
+  
+
+  
+
+</article>
+    
+  </article>
+  
+
   
 </section>
-
-
-  </main>
-  <footer class="flex flex-col h-40 items-center justify-center text-gray-400 text-sm">
-  <!-- busuanzi -->
-  
-<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-<!-- Busuanzi Analytics -->
-<div class="flex items-center gap-2">
-  <span>Visitors</span>
-  <span id="busuanzi_value_site_uv"></span>
-  <span>Page Views</span>
-  <span id="busuanzi_value_site_pv"></span>
 </div>
-<!-- End Busuanzi Analytics -->
-
-
-  <!-- copyright -->
-  <div class="flex items-center gap-2">
-    <a target="_blank" href="https://creativecommons.org/licenses/by-nc-sa/4.0/" style="color: inherit;">CC BY-NC-SA 4.0</a>
-    <span>© 2022</span>
-    <iconify-icon width="18" icon="emojione-monotone:maple-leaf" ></iconify-icon>
-    <a href="https://github.com/xbmlz" target="_blank" rel="noopener noreferrer">xbmlz</a>
+    <footer class="footer">
+  <div class="outer">
+    <ul class="list-inline">
+      <li>Hexo &copy; 2024</li>
+      
+        <li>
+          
+            <a href="https://beian.miit.gov.cn/" target="_blank"></a>
+            
+        </li>
+      
+      <li>Powered by <a href="http://hexo.io/" target="_blank">Hexo</a></li>
+      <li>theme  <a target="_blank" rel="noopener" href="https://github.com/zhwangart/hexo-theme-ocean">Ocean</a></li>
+    </ul>
+    <p><ul class="list-inline">
+  
+  <li><i class="fe fe-bar-chart tooltip" data-tooltip="PV"></i> <span id="busuanzi_value_site_pv"></span></li>
+  
+  <li><i class="fe fe-smile-alt tooltip" data-tooltip="UV"></i> <span id="busuanzi_value_site_uv"></span></li>
+  
+</ul></p>
   </div>
-  <!-- powered by -->
-  <div class="flex items-center gap-2">
-    <span>Powered by</span>
-    <a href="https://hexo.io/" target="_blank" rel="noopener noreferrer">Hexo</a>
-    <span>&</span>
-    <a href="https://github.com/xbmlz/hexo-theme-maple" target="_blank" rel="noopener noreferrer">Maple</a>
-  </div>
-
 </footer>
-
-  <div class="back-to-top box-border fixed right-6 z-1024 -bottom-20 rounded py-1 px-1 bg-slate-900 opacity-60 text-white cursor-pointer text-center dark:bg-slate-600">
-    <span class="flex justify-center items-center text-sm">
-      <iconify-icon width="18" icon="ion:arrow-up-c" id="go-top"></iconify-icon>
-      <span id="scrollpercent"><span>0</span> %</span>
-    </span>
+  </main>
+  <aside class="sidebar">
+    <button class="navbar-toggle"></button>
+<nav class="navbar">
+  
+  <div class="logo">
+    <a href="/"><img src="/images/hexo.svg" alt="Hexo"></a>
   </div>
   
-<script src="/js/main.js"></script>
-
-
-  <script>
-    $(document).ready(function () {
-      const mapleCount = "10";
-      const speed = "0.5";
-      const mapleEl = document.getElementById("maple");
-      const maples = Array.from({ length: mapleCount }).map(() => {
-        const maple = document.createElement("div");
-        const scale = Math.random() * 0.5 + 0.5;
-        const offset = Math.random() * 2 - 1;
-        const x = Math.random() * mapleEl.clientWidth;
-        const y = -Math.random() * mapleEl.clientHeight;
-        const duration = 10 / speed;
-        const delay = -duration;
-        maple.className = "maple";
-        maple.style.width = `${24 * scale}px`;
-        maple.style.height = `${24 * scale}px`;
-        maple.style.left = `${x}px`;
-        maple.style.top = `${y}px`;
-        maple.style.setProperty("--maple-fall-offset", offset);
-        maple.style.setProperty("--maple-fall-height", `${Math.abs(y) + mapleEl.clientHeight}px`);
-        maple.style.animation = `fall ${duration}s linear infinite`;
-        maple.style.animationDelay = `${delay}s`;
-        mapleEl.appendChild(maple)
-        return maple
-      })
-    });
-  </script>
+  <ul class="nav nav-main">
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/">Home</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/archives">Archives</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/gallery">Gallery</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link" href="/about">About</a>
+    </li>
+    
+    <li class="nav-item">
+      <a class="nav-item-link nav-item-search" title="Search">
+        <i class="fe fe-search"></i>
+        Search
+      </a>
+    </li>
+  </ul>
+</nav>
+<nav class="navbar navbar-bottom">
+  <ul class="nav">
+    <li class="nav-item">
+      <div class="totop" id="totop">
+  <i class="fe fe-rocket"></i>
+</div>
+    </li>
+    <li class="nav-item">
+      
+      <a class="nav-item-link" target="_blank" href="/atom.xml" title="RSS Feed">
+        <i class="fe fe-feed"></i>
+      </a>
+      
+    </li>
+  </ul>
+</nav>
+<div class="search-form-wrap">
+  <div class="local-search local-search-plugin">
+  <input type="search" id="local-search-input" class="local-search-input" placeholder="Search...">
+  <div id="local-search-result" class="local-search-result"></div>
+</div>
+</div>
+  </aside>
   
+<script src="/js/jquery-2.0.3.min.js"></script>
 
 
-  <div class="fixed top-0 bottom-0 left-0 right-0 pointer-events-none print:hidden" id="maple"></div>
+<script src="/js/jquery.justifiedGallery.min.js"></script>
+
+
+<script src="/js/lazyload.min.js"></script>
+
+
+<script src="/js/busuanzi-2.3.pure.min.js"></script>
+
+
+
+<script src="/fancybox/jquery.fancybox.min.js"></script>
+
+
+
+
+
+
+<script src="/js/ocean.js"></script>
+
 </body>
 
 </html>
